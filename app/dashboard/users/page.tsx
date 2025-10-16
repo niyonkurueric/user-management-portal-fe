@@ -19,6 +19,8 @@ export default function UsersPage() {
   const [isMounted, setIsMounted] = useState(false);
   const [activeUser, setActiveUser] = useState<{ edit?: User; delete?: User }>({});
 
+  console.log({ users, isLoading, isError });
+
   useEffect(() => setIsMounted(true), []);
 
   return (

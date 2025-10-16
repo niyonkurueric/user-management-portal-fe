@@ -1,10 +1,27 @@
 import { api } from '@/lib/axios';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { User } from '@/types/user';
+import { fetchUsersExport } from '@/services/userExportService';
+
+const normalizeUser = (u: any): User => ({
+  id: Number(u.id),
+  name: String(u.name ?? ''),
+  email: String(u.email ?? ''),
+  role: (String(u.role ?? 'user') as User['role']),
+  status: u.status ? String(u.status) : undefined,
+  createdAt: u.createdAt
+    ? String(u.createdAt).trim()
+    : (u.created_at ? String(u.created_at).trim() : undefined),
+});
 
 const fetchUsers = async (): Promise<User[]> => {
+  try {
+    const exported = await fetchUsersExport();
+    if (exported?.users?.length) return exported.users.map(normalizeUser);
+  } catch (_) {}
   const { data } = await api.get('/users');
-  return data;
+  const arr = Array.isArray(data) ? data : (Array.isArray(data?.users) ? data.users : []);
+  return arr.map(normalizeUser);
 };
 
 const createUser = async (user: Partial<User>) => {
