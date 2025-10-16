@@ -1,8 +1,11 @@
 "use client";
 
-import { Menu, User, LogOut, ChevronDown } from 'lucide-react';
-import { useState } from 'react';
-import { Button } from '../ui/button';
+import { Menu, LogOut, ChevronDown } from "lucide-react";
+import { useState } from "react";
+import { Button } from "../ui/button";
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
+import { UserAvatar } from "@/components/common/UserAvatar";
 
 interface NavBarProps {
   onMenuClick?: () => void;
@@ -10,6 +13,8 @@ interface NavBarProps {
 
 export function NavBar({ onMenuClick }: NavBarProps) {
   const [showProfileMenu, setShowProfileMenu] = useState<boolean>(false);
+  const { user, logout } = useAuth();
+  const router = useRouter();
 
   return (
     <nav className="bg-white border-b border-gray-200 fixed top-0 left-0 right-0 z-50 h-16">
@@ -30,21 +35,33 @@ export function NavBar({ onMenuClick }: NavBarProps) {
               onClick={() => setShowProfileMenu(!showProfileMenu)}
               className="flex items-center gap-2 p-2 rounded-md transition-colors hover:bg-white bg-white"
             >
-              <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
-                <User className="w-4 h-4 text-gray-600" />
-              </div>
+              <UserAvatar name={user?.name} />
+              <span className="text-sm text-gray-800 hidden sm:block">
+                {user?.name ?? "Account"}
+              </span>
               <ChevronDown className="w-4 h-4 text-gray-600" />
             </Button>
 
             {showProfileMenu && (
               <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg py-1">
-                <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Profile</a>
-                <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Settings</a>
+                <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+                  Profile
+                </a>
+                <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+                  Settings
+                </a>
                 <hr className="my-1 border-gray-200" />
-                <a href="#" className="px-4 py-2 text-sm text-red-600 hover:bg-gray-50 flex items-center">
+                <button
+                  onClick={() => {
+                    logout();
+                    setShowProfileMenu(false);
+                    router.replace("/login");
+                  }}
+                  className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-50 flex items-center"
+                >
                   <LogOut className="w-4 h-4 mr-2" />
                   Logout
-                </a>
+                </button>
               </div>
             )}
           </div>

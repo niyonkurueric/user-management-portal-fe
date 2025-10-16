@@ -22,13 +22,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const menuItems = [
     { id: 'dashboard', icon: Home, label: 'Dashboard', path: '/dashboard' },
     { id: 'users', icon: Users, label: 'Users', path: '/dashboard/users' },
-    { id: 'analytics', icon: BarChart3, label: 'Analytics', path: '/dashboard/analytics' },
-    { id: 'settings', icon: Settings, label: 'Settings', path: '/dashboard/settings' },
   ];
 
   return (
     <>
-      {/* Backdrop only on small screens when sidebar is open */}
       {isOpen && (
         <div
           className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
