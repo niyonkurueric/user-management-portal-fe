@@ -12,6 +12,7 @@ export default function UsersByRoleDoughnut() {
 
   const { labels, counts } = React.useMemo(() => {
     const map = new Map<string, number>();
+    map.set("admin", 1);
     for (const u of users) {
       const role = String((u as any).role ?? "unknown");
       map.set(role, (map.get(role) ?? 0) + 1);

@@ -6,7 +6,6 @@ import { Trash2, Pencil } from "lucide-react";
 import toast from "react-hot-toast";
 import { User } from "@/types/user";
 import { formatDateSafe } from "@/lib/date";
-// import { useDeleteUser } from "@/services/userService";
 export const getColumns = (
   onEdit?: (user: User) => void,
   onDelete?: (user: User) => void
@@ -16,10 +15,10 @@ export const getColumns = (
       header: "Name",
       cell: ({ row }) => <div className="font-medium text-gray-900">{row.getValue("name")}</div>,
     },
-    // {
-    //   accessorKey: "email",
-    //   header: "Email",
-    // },
+    {
+      accessorKey: "ogEmail",
+      header: "Email",
+    },
     {
       accessorKey: "role",
       header: "Role",
@@ -43,7 +42,6 @@ export const getColumns = (
       header: "Actions",
       cell: ({ row }) => {
         const user = row.original;
-        // const deleteUser = useDeleteUser();
 
         return (
           <div className="flex justify-center gap-2">

@@ -6,5 +6,6 @@ export interface User {
   email: string;
   role: Role;
   status?: string;
+  ogEmail: string;
   createdAt?: string;
 }

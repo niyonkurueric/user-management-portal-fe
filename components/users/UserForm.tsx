@@ -46,7 +46,7 @@ export const UserFormContent = ({ initialUser, onClose }: Props) => {
   useEffect(() => {
     reset({
       name: initialUser?.name ?? '',
-      email: initialUser?.email ?? '',
+      email: initialUser?.ogEmail ?? '',
       role: initialUser?.role ?? 'user',
     } as Partial<FormData>);
   }, [initialUser, reset]);

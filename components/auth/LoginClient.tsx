@@ -85,7 +85,7 @@ export default function LoginClient() {
       </div>
 
       <div className="relative z-10 w-full max-w-md mx-4">
-        <div className="backdrop-blur-xl bg-slate-900/5 border border-slate-200/60 rounded-2xl shadow-2xl p-8">
+        <div className="backdrop-blur-xl bg-slate-900/5 border border-slate-200/60 rounded-2xl shadow-md p-8">
           <div className="text-center mb-8">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-slate-900/5 backdrop-blur-sm rounded-full mb-4 border border-slate-200/60">
               <Lock className="w-8 h-8 text-slate-700" />

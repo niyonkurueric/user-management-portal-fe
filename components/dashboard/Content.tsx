@@ -46,9 +46,9 @@ const DashboardContent = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         {[
-          { label: "Total Users", value: isLoading ? "—" : String(totalUsers) },
+          { label: "Total Users", value: isLoading ? "—" : String(totalUsers + 1) },
           { label: "New Users (7d)", value: isLoading ? "—" : String(last7DaysCount) },
-          { label: "Admins", value: isLoading ? "—" : String(adminCount) },
+          { label: "Admins", value: isLoading ? "—" : String(adminCount + 1) },
           { label: "Standard Users", value: isLoading ? "—" : String(standardUserCount) },
         ].map((stat, i) => (
           <Card key={i}>

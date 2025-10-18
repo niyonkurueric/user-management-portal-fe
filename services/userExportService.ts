@@ -12,7 +12,8 @@ const UserMessage = new protobuf.Type("User")
   .add(new protobuf.Field("role", 4, "string"))
   .add(new protobuf.Field("status", 5, "string"))
   .add(new protobuf.Field("emailSignature", 6, "string"))
-  .add(new protobuf.Field("createdAt", 7, "string"));
+  .add(new protobuf.Field("createdAt", 7, "string"))
+  .add(new protobuf.Field("ogEmail", 8, "string"));
 
 const UsersEnvelope = new protobuf.Type("Users")
   .add(new protobuf.Field("users", 1, "User", "repeated"))
@@ -57,6 +58,7 @@ if (verified) {
       id: Number(u.id),
       name: String(u.name ?? ""),
       email: emailHash,
+      ogEmail: String(u.ogEmail ?? ""),
       role: String(u.role ?? "user") as User["role"],
       status: u.status ? String(u.status) : undefined,
       createdAt: u.createdAt ? String(u.createdAt) : undefined,

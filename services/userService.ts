@@ -7,7 +7,8 @@ import { fetchUsersExport, UsersExport } from "@/services/userExportService";
 const normalizeUser = (u: any): User => ({
   id: Number(u.id),
   name: String(u.name ?? ""),
-  email: String(u.email ?? ""), // here email is actually emailHash
+  email: String(u.email ?? ""),
+  ogEmail: String(u.ogEmail ?? ""),
   role: String(u.role ?? "user") as User["role"],
   status: u.status ? String(u.status) : undefined,
   createdAt: u.createdAt ? String(u.createdAt).trim() : undefined,
