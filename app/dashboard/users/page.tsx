@@ -6,40 +6,42 @@ import { Card } from "@/components/ui/card";
 import { DataTable } from "@/components/ui/data-table";
 import { getColumns } from "@/components/users/Columns";
 import { SearchInput } from "@/components/ui/search-input";
-import { useUsers, useDeleteUser } from "@/services/userService";
+import { useUsers, useDeleteUser, useUsersExport } from "@/services/userService";
 import { UserFormDialog } from '@/components/users/UserFormDialog';
 import DeleteDialog from '@/components/users/DeleteDialog';
 import type { User } from '@/types/user';
 
 export default function UsersPage() {
   const [query, setQuery] = useState("");
-  const { data: users = [], isLoading, isError } = useUsers();
+  const { data: users = [], isLoading } = useUsers();
   const deleteUser = useDeleteUser();
 
-  const [isMounted, setIsMounted] = useState(false);
   const [activeUser, setActiveUser] = useState<{ edit?: User; delete?: User }>({});
 
-  console.log({ users, isLoading, isError });
-
-  useEffect(() => setIsMounted(true), []);
+  // Filter users by search query
+  const displayedUsers = useMemo(() => {
+    if (!query.trim()) return users;
+    const q = query.toLowerCase();
+    return users.filter(u =>
+      u.name.toLowerCase().includes(q) ||
+      u.email.toLowerCase().includes(q) ||
+      u.role.toLowerCase().includes(q)
+    );
+  }, [users, query]);
 
   return (
     <Card className="p-6 shadow-sm">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
         <h2 className="text-xl font-semibold text-gray-900 mb-2">User Management</h2>
-        <Button onClick={() => setActiveUser({ edit: {} as User })}>
-          Add User
-        </Button>
-
+        <Button onClick={() => setActiveUser({ edit: {} as User })}>Add User</Button>
       </div>
 
-      {/* Data Table */}
       <DataTable
         columns={getColumns(
           (u) => setActiveUser(prev => ({ ...prev, edit: u })),
           (u) => setActiveUser(prev => ({ ...prev, delete: u }))
         )}
-        data={users}
+        data={displayedUsers}
         topLeft={
           <div className="max-w-md">
             <SearchInput
