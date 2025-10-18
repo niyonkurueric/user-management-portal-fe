@@ -104,8 +104,9 @@ This app is ready to deploy to Vercel or any static hosting that supports Next.j
 2. Run the app and ensure lint passes.
 3. Open a PR with clear description and screenshots where applicable.
 
-## Contact
+## screenshots 
 
-If you have questions, ask the original author or open an issue in this repository.
-
----
+<img width="1438" height="861" alt="Screenshot 2025-10-18 at 18 08 45" src="https://github.com/user-attachments/assets/7bad4bf5-096a-44a9-8816-2f202e9fc708" />
+<img width="1438" height="861" alt="Screenshot 2025-10-18 at 18 08 28" src="https://github.com/user-attachments/assets/eb476cc8-2d11-4ae4-bc88-bd9e9d36434d" />
+<img width="1434" height="855" alt="Screenshot 2025-10-18 at 18 07 33" src="https://github.com/user-attachments/assets/404249bf-cf22-4fad-ba9c-de24a55a68e7" />
+<img width="1433" height="885" alt="Screenshot 2025-10-18 at 18 07 10" src="https://github.com/user-attachments/assets/94616ead-44e8-4a00-841f-c9dc4a3fd760" />
