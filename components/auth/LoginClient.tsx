@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { Lock, Mail } from "lucide-react";
+import { Lock, Mail, Eye, EyeOff } from "lucide-react";
+import { AxiosError } from "axios";
 import { loginRequest } from "@/services/authService";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -17,6 +18,7 @@ export default function LoginClient() {
   const { login } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
@@ -35,8 +37,38 @@ export default function LoginClient() {
       login(token, user ?? null);
       toast.success("Signed in successfully");
       router.push("/dashboard");
-    } catch (e: any) {
-      const message = e?.response?.data?.message || "Invalid credentials, please try again.";
+    } catch (err: unknown) {
+      // Better error parsing: handle network, validation and server messages
+      let message = "Invalid credentials, please try again.";
+      const e = err as AxiosError;
+
+      if (e && e.response) {
+        // Server responded with a status code outside 2xx
+        type RespBody = { message?: string; errors?: Array<{ message?: string }>; } | string;
+        const resp = e.response as { data?: RespBody } | undefined;
+        const data = resp?.data;
+        if (data) {
+          if (typeof data === "string") {
+            message = data;
+          } else {
+            const obj = data as { message?: string; errors?: Array<{ message?: string }> };
+            if (obj.message) message = obj.message;
+            else if (obj.errors && Array.isArray(obj.errors)) {
+              // pick first error message if available
+              const first = obj.errors[0];
+              message = first?.message || JSON.stringify(first) || message;
+            }
+          }
+        }
+      } else if (e && e.request) {
+        // Request made but no response
+        message = "Unable to reach the server. Check your network and try again.";
+      } else if (err && typeof err === "object" && "message" in err) {
+        // fallback for other error shapes
+        const maybe = err as { message?: string };
+        message = maybe.message || message;
+      }
+
       setError(message);
       toast.error(message);
     } finally {
@@ -78,11 +110,22 @@ export default function LoginClient() {
             <div className="relative">
               <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
               <Input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 placeholder="Password"
                 {...register("password")}
-                className="pl-11 bg-slate-900/5 border-slate-200 text-slate-900 placeholder:text-slate-400 focus:bg-slate-900/10 focus:border-slate-300 h-12 backdrop-blur-sm transition-all"
+                className="pl-11 pr-11 bg-slate-900/5 border-slate-200 text-slate-900 placeholder:text-slate-400 focus:bg-slate-900/10 focus:border-slate-300 h-12 backdrop-blur-sm transition-all"
+                aria-invalid={errors.password ? "true" : "false"}
               />
+
+              <button
+                type="button"
+                onClick={() => setShowPassword((v) => !v)}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+                className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 inline-flex items-center justify-center text-slate-500 hover:text-slate-700"
+              >
+                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
+
               {errors.password && (
                 <p className="mt-1 text-xs text-red-600">{errors.password.message}</p>
               )}
